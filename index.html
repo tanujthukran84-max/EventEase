@@ -80,7 +80,7 @@ html{scroll-padding-top:70px}
   <span class="pill">🎉 Your event planner</span>
   <h1>Plan the event. Skip the chaos.</h1>
   <p>EventEase keeps your dates, to-dos and spending in one place, so college fests, birthdays and meetups run smoothly.</p>
-  <a class="btn" href="#events">Add your first event</a>
+  <a class="btn" href="#features">Get Started</a>
  </div>
  <div class="ticket" aria-live="polite">
   <small>Your next event</small>
@@ -149,13 +149,7 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-const d0=new Date(Date.now()+9*864e5);d0.setHours(18,0,0,0);
-const iso=new Date(d0-d0.getTimezoneOffset()*6e4).toISOString().slice(0,16);
-let events=load('ee_events',[{name:'Farewell Party',date:iso,place:'College Auditorium',cat:'College fest'}]),
-tasks=load('ee_tasks',[{t:'Book the venue',done:true},{t:'Send invites',done:false},{t:'Arrange food',done:false}]),
-exps=load('ee_exps',[{n:'Venue deposit',a:2000},{n:'Decor',a:1500}]),
-budget=load('ee_budget',10000),
-guests=load('ee_guests',[{n:'Aman',s:0},{n:'Riya',s:1},{n:'Karan',s:2}]);
+let events=load('ee_events',[]),tasks=load('ee_tasks',[]),exps=load('ee_exps',[]),budget=load('ee_budget',0),guests=load('ee_guests',[]);
 const GS=['Coming','Maybe','Not coming'],GC=['','maybe','no'];
 
 function renderEvents(){
