@@ -12,7 +12,7 @@
 body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
 h1,h2,h3,.logo{font-family:'Bricolage Grotesque','Trebuchet MS',sans-serif}
 a{color:inherit}
-header{display:flex;justify-content:space-between;align-items:center;padding:16px 5vw;flex-wrap:wrap;gap:8px}
+header{position:sticky;top:0;z-index:20;background:rgba(246,243,251,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:16px 5vw;flex-wrap:wrap;gap:8px}
 .logo{font-weight:800;font-size:1.4rem;text-decoration:none}
 nav a{margin-left:18px;text-decoration:none;font-weight:500}
 nav a:hover{text-decoration:underline}
@@ -52,16 +52,32 @@ li span{flex:1}
 .over{color:#c0392b}
 .empty{color:var(--soft);padding:10px 0}
 footer{text-align:center;padding:30px 5vw;color:var(--soft);font-size:.9rem}
-@media(max-width:760px){.hero,.two{grid-template-columns:1fr}.ticket{transform:none}}
+.pill{display:inline-block;background:var(--ink);color:var(--gold);padding:4px 14px;border-radius:999px;font-size:.85rem;margin-bottom:14px}
+html{scroll-padding-top:70px}
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat{border-radius:18px;padding:22px;text-decoration:none;display:block;transition:transform .15s}
+.feat:hover{transform:translateY(-4px)}
+.feat i{font-style:normal;font-size:2rem;display:block}
+.feat h3{margin:8px 0 4px;font-size:1.25rem}
+.feat p{opacity:.8;font-size:.95rem}
+.f1{background:#ffe8a8}.f2{background:#c8ece9}.f3{background:#e3d9f7}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+.stats div{background:var(--ink);color:#fff;border-radius:14px;padding:16px;text-align:center;font-size:.9rem}
+.stats b{display:block;font:800 1.8rem 'Bricolage Grotesque',sans-serif;color:var(--gold)}
+.ticket{transition:transform .3s}.ticket:hover{transform:rotate(0)}
+.badge{border:0;border-radius:999px;padding:3px 12px;font:500 .8rem 'DM Sans',sans-serif;cursor:pointer;background:#c8ece9;color:var(--ink)}
+.badge.maybe{background:#ffe8a8}.badge.no{background:#f8d0d0}
+@media(max-width:760px){.feats{grid-template-columns:1fr}.hero,.two{grid-template-columns:1fr}.ticket{transform:none}}
 @media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 </style>
 </head>
 <body>
-<header><a class="logo" href="#top">EventEase</a><nav><a href="#events">Events</a><a href="#checklist">Checklist</a><a href="#budget">Budget</a></nav></header>
+<header><a class="logo" href="#top">EventEase</a><nav><a href="#features">Features</a><a href="#events">Events</a><a href="#checklist">Checklist</a><a href="#budget">Budget</a><a href="#guests">Guests</a></nav></header>
 
 <main id="top">
 <div class="hero">
  <div>
+  <span class="pill">🎉 Your event planner</span>
   <h1>Plan the event. Skip the chaos.</h1>
   <p>EventEase keeps your dates, to-dos and spending in one place, so college fests, birthdays and meetups run smoothly.</p>
   <a class="btn" href="#events">Add your first event</a>
@@ -75,8 +91,23 @@ footer{text-align:center;padding:30px 5vw;color:var(--soft);font-size:.9rem}
  </div>
 </div>
 
+<section id="features">
+ <h2>Everything in one place</h2>
+ <p class="sub">Pick a tool and start planning.</p>
+ <div class="feats">
+  <a class="feat f1" href="#events"><i>🎟️</i><h3>Events</h3><p>Save dates and venues, and watch the countdown to the next one.</p></a>
+  <a class="feat f2" href="#checklist"><i>✅</i><h3>Checklist</h3><p>List what needs doing and tick it off as you go.</p></a>
+  <a class="feat f3" href="#budget"><i>💰</i><h3>Budget</h3><p>Set a limit, log expenses and see what is left.</p></a>
+ </div>
+ <div class="stats">
+  <div><b id="sE">0</b>Events planned</div>
+  <div><b id="sT">0/0</b>Tasks done</div>
+  <div><b id="sS">₹0</b>Spent so far</div>
+ </div>
+</section>
+
 <section id="events">
- <h2>Your events</h2>
+ <h2>🎟️ Your events</h2>
  <p class="sub">Add an event and it appears as a ticket below.</p>
  <form id="evForm">
   <input id="evName" placeholder="Event name" required>
@@ -91,13 +122,13 @@ footer{text-align:center;padding:30px 5vw;color:var(--soft);font-size:.9rem}
 <section id="checklist">
  <div class="two">
   <div class="box">
-   <h2>Checklist</h2>
+   <h2>✅ Checklist</h2>
    <p class="sub" id="taskCount"></p>
    <form id="taskForm"><input id="taskIn" placeholder="e.g. Book the venue" required><button class="btn" type="submit">Add task</button></form>
    <ul id="taskList"></ul>
   </div>
   <div class="box" id="budget">
-   <h2>Budget</h2>
+   <h2>💰 Budget</h2>
    <p class="sub">Set a limit and log each expense.</p>
    <form id="budForm"><input id="budIn" type="number" min="0" placeholder="Total budget (₹)"><button class="btn" type="submit">Set budget</button></form>
    <form id="expForm"><input id="expN" placeholder="Expense (e.g. Decor)" required><input id="expA" type="number" min="1" placeholder="Amount (₹)" required><button class="btn" type="submit">Add expense</button></form>
@@ -107,20 +138,30 @@ footer{text-align:center;padding:30px 5vw;color:var(--soft);font-size:.9rem}
   </div>
  </div>
 </section>
+<section id="guests"><div class="box"><h2>👥 Guest list</h2><p class="sub" id="gCount"></p>
+ <form id="gForm"><input id="gN" placeholder="Guest name" required><button class="btn" type="submit">Add guest</button></form>
+ <ul id="gList"></ul></div></section>
 </main>
-<footer>EventEase © 2026. Made for people who plan events.</footer>
+<footer><b>🎟️ EventEase</b><br>Plan the event. Skip the chaos.<br>Made with care for every organizer, 2026.</footer>
 
 <script>
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-let events=load('ee_events',[]),tasks=load('ee_tasks',[]),exps=load('ee_exps',[]),budget=load('ee_budget',0);
+const d0=new Date(Date.now()+9*864e5);d0.setHours(18,0,0,0);
+const iso=new Date(d0-d0.getTimezoneOffset()*6e4).toISOString().slice(0,16);
+let events=load('ee_events',[{name:'Farewell Party',date:iso,place:'College Auditorium',cat:'College fest'}]),
+tasks=load('ee_tasks',[{t:'Book the venue',done:true},{t:'Send invites',done:false},{t:'Arrange food',done:false}]),
+exps=load('ee_exps',[{n:'Venue deposit',a:2000},{n:'Decor',a:1500}]),
+budget=load('ee_budget',10000),
+guests=load('ee_guests',[{n:'Aman',s:0},{n:'Riya',s:1},{n:'Karan',s:2}]);
+const GS=['Coming','Maybe','Not coming'],GC=['','maybe','no'];
 
 function renderEvents(){
  events.sort((a,b)=>new Date(a.date)-new Date(b.date));
  $('#evList').innerHTML=events.length?events.map((e,i)=>`<div class="stub"><div><h3>${esc(e.name)}</h3><span>${new Date(e.date).toLocaleString([], {dateStyle:'medium',timeStyle:'short'})}</span><br><span>${esc(e.place||'Venue not set')}</span><br><span class="tag">${esc(e.cat)}</span></div><button class="x" aria-label="Delete event" data-i="${i}">×</button></div>`).join(''):'<p class="empty">No events yet. Add one above.</p>';
- save('ee_events',events);tick();
+ save('ee_events',events);tick();stats();
 }
 function tick(){
  const up=events.find(e=>new Date(e.date)>new Date());
@@ -135,7 +176,7 @@ function renderTasks(){
  const left=tasks.filter(t=>!t.done).length;
  $('#taskCount').textContent=tasks.length?`${left} of ${tasks.length} tasks left`:'Add the tasks you need to finish.';
  $('#taskList').innerHTML=tasks.length?tasks.map((t,i)=>`<li class="${t.done?'done':''}"><input type="checkbox" style="flex:0 0 auto" ${t.done?'checked':''} data-t="${i}" aria-label="Mark done"><span>${esc(t.t)}</span><button class="x" aria-label="Delete task" data-d="${i}">×</button></li>`).join(''):'<li class="empty">No tasks yet.</li>';
- save('ee_tasks',tasks);
+ save('ee_tasks',tasks);stats();
 }
 function renderBudget(){
  const sp=exps.reduce((s,e)=>s+e.a,0);
@@ -143,7 +184,7 @@ function renderBudget(){
  const l=budget-sp;
  $('#left').innerHTML=budget?(l>=0?`₹${l} left`:`<span class="over">Over budget by ₹${-l}</span>`):'Set a budget to track what is left.';
  $('#expList').innerHTML=exps.length?exps.map((e,i)=>`<li><span>${esc(e.n)}</span><b>₹${e.a}</b><button class="x" aria-label="Delete expense" data-e="${i}">×</button></li>`).join(''):'<li class="empty">No expenses yet.</li>';
- save('ee_exps',exps);save('ee_budget',budget);
+ save('ee_exps',exps);save('ee_budget',budget);stats();
 }
 
 $('#evForm').onsubmit=e=>{e.preventDefault();events.push({name:$('#evName').value.trim(),date:$('#evDate').value,place:$('#evPlace').value.trim(),cat:$('#evCat').value});e.target.reset();renderEvents()};
@@ -154,6 +195,16 @@ $('#evList').onclick=e=>{const i=e.target.dataset.i;if(i!==undefined){events.spl
 $('#taskList').onclick=e=>{const d=e.target.dataset;if(d.t!==undefined){tasks[d.t].done=e.target.checked;renderTasks()}if(d.d!==undefined){tasks.splice(d.d,1);renderTasks()}};
 $('#expList').onclick=e=>{const i=e.target.dataset.e;if(i!==undefined){exps.splice(i,1);renderBudget()}};
 
+function stats(){$('#sE').textContent=events.length;$('#sT').textContent=tasks.filter(t=>t.done).length+'/'+tasks.length;$('#sS').textContent='₹'+exps.reduce((s,e)=>s+e.a,0)}
+function renderGuests(){
+ const c=guests.filter(g=>g.s==0).length;
+ $('#gCount').textContent=guests.length?`${c} of ${guests.length} guests coming`:'Add the people you are inviting.';
+ $('#gList').innerHTML=guests.length?guests.map((g,i)=>`<li><span>${esc(g.n)}</span><button class="badge ${GC[g.s]}" data-g="${i}" aria-label="Change status">${GS[g.s]}</button><button class="x" aria-label="Delete guest" data-x="${i}">×</button></li>`).join(''):'<li class="empty">No guests yet.</li>';
+ save('ee_guests',guests);
+}
+$('#gForm').onsubmit=e=>{e.preventDefault();guests.push({n:$('#gN').value.trim(),s:0});e.target.reset();renderGuests()};
+$('#gList').onclick=e=>{const d=e.target.dataset;if(d.g!==undefined){guests[d.g].s=(guests[d.g].s+1)%3;renderGuests()}if(d.x!==undefined){guests.splice(d.x,1);renderGuests()}};
+renderGuests();
 renderEvents();renderTasks();renderBudget();setInterval(tick,30000);
 </script>
 </body>
