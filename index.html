@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EventEase | Plan events without the chaos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3fb;--ink:#2a1a40;--soft:#6b5d80;--gold:#ffb81c;--teal:#0f8b8d;--card:#fff;--line:#d9d0e8}
+*{box-sizing:border-box;margin:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+h1,h2,h3,.logo{font-family:'Bricolage Grotesque','Trebuchet MS',sans-serif}
+a{color:inherit}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 5vw;flex-wrap:wrap;gap:8px}
+.logo{font-weight:800;font-size:1.4rem;text-decoration:none}
+nav a{margin-left:18px;text-decoration:none;font-weight:500}
+nav a:hover{text-decoration:underline}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:center;padding:40px 5vw 56px}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.05;font-weight:800}
+.hero p{margin:16px 0 24px;max-width:46ch;color:var(--soft)}
+.btn{display:inline-block;background:var(--ink);color:#fff;border:0;padding:12px 22px;border-radius:999px;font:500 1rem 'DM Sans',sans-serif;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--teal)}
+.ticket{background:var(--gold);border-radius:18px;padding:26px;position:relative;transform:rotate(-2deg);box-shadow:8px 8px 0 var(--ink)}
+.ticket:after{content:"";position:absolute;left:-12px;top:62%;width:24px;height:24px;border-radius:50%;background:var(--bg)}
+.ticket:before{content:"";position:absolute;right:-12px;top:62%;width:24px;height:24px;border-radius:50%;background:var(--bg)}
+.ticket small{font-weight:500}
+.ticket h2{font-size:1.8rem;margin:4px 0 18px}
+.count{display:flex;gap:10px;border-top:2px dashed var(--ink);padding-top:22px}
+.count div{text-align:center;flex:1}
+.count b{display:block;font:800 2rem 'Bricolage Grotesque',sans-serif}
+section{padding:48px 5vw}
+section h2{font-size:2rem;margin-bottom:6px}
+.sub{color:var(--soft);margin-bottom:22px}
+form{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+input,select{font:inherit;padding:11px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);flex:1 1 150px;min-width:0}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.stub{background:var(--card);border-radius:14px;border-left:8px solid var(--teal);padding:16px 18px;display:flex;justify-content:space-between;gap:10px;box-shadow:0 2px 10px rgba(42,26,64,.08)}
+.stub h3{font-size:1.15rem}
+.stub span{font-size:.9rem;color:var(--soft)}
+.tag{display:inline-block;background:var(--bg);border-radius:6px;padding:1px 8px;font-size:.8rem;margin-top:4px}
+.x{background:none;border:0;font-size:1.3rem;cursor:pointer;color:var(--soft)}
+.x:hover{color:#c0392b}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.box{background:var(--card);border-radius:16px;padding:22px}
+ul{list-style:none;padding:0}
+li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+li.done span{text-decoration:line-through;color:var(--soft)}
+li span{flex:1}
+.money{font:800 1.6rem 'Bricolage Grotesque',sans-serif}
+.over{color:#c0392b}
+.empty{color:var(--soft);padding:10px 0}
+footer{text-align:center;padding:30px 5vw;color:var(--soft);font-size:.9rem}
+@media(max-width:760px){.hero,.two{grid-template-columns:1fr}.ticket{transform:none}}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+<header><a class="logo" href="#top">EventEase</a><nav><a href="#events">Events</a><a href="#checklist">Checklist</a><a href="#budget">Budget</a></nav></header>
+
+<main id="top">
+<div class="hero">
+ <div>
+  <h1>Plan the event. Skip the chaos.</h1>
+  <p>EventEase keeps your dates, to-dos and spending in one place, so college fests, birthdays and meetups run smoothly.</p>
+  <a class="btn" href="#events">Add your first event</a>
+ </div>
+ <div class="ticket" aria-live="polite">
+  <small>Your next event</small>
+  <h2 id="nextName">Nothing planned yet</h2>
+  <div class="count">
+   <div><b id="cd">0</b>days</div><div><b id="ch">0</b>hours</div><div><b id="cm">0</b>minutes</div>
+  </div>
+ </div>
+</div>
+
+<section id="events">
+ <h2>Your events</h2>
+ <p class="sub">Add an event and it appears as a ticket below.</p>
+ <form id="evForm">
+  <input id="evName" placeholder="Event name" required>
+  <input id="evDate" type="datetime-local" required aria-label="Date and time">
+  <input id="evPlace" placeholder="Venue">
+  <select id="evCat" aria-label="Category"><option>College fest</option><option>Birthday</option><option>Meetup</option><option>Workshop</option><option>Other</option></select>
+  <button class="btn" type="submit">Add event</button>
+ </form>
+ <div class="list" id="evList"></div>
+</section>
+
+<section id="checklist">
+ <div class="two">
+  <div class="box">
+   <h2>Checklist</h2>
+   <p class="sub" id="taskCount"></p>
+   <form id="taskForm"><input id="taskIn" placeholder="e.g. Book the venue" required><button class="btn" type="submit">Add task</button></form>
+   <ul id="taskList"></ul>
+  </div>
+  <div class="box" id="budget">
+   <h2>Budget</h2>
+   <p class="sub">Set a limit and log each expense.</p>
+   <form id="budForm"><input id="budIn" type="number" min="0" placeholder="Total budget (₹)"><button class="btn" type="submit">Set budget</button></form>
+   <form id="expForm"><input id="expN" placeholder="Expense (e.g. Decor)" required><input id="expA" type="number" min="1" placeholder="Amount (₹)" required><button class="btn" type="submit">Add expense</button></form>
+   <p>Spent: <span class="money" id="spent">₹0</span> of <span id="total">₹0</span></p>
+   <p id="left" class="sub"></p>
+   <ul id="expList"></ul>
+  </div>
+ </div>
+</section>
+</main>
+<footer>EventEase © 2026. Made for people who plan events.</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let events=load('ee_events',[]),tasks=load('ee_tasks',[]),exps=load('ee_exps',[]),budget=load('ee_budget',0);
+
+function renderEvents(){
+ events.sort((a,b)=>new Date(a.date)-new Date(b.date));
+ $('#evList').innerHTML=events.length?events.map((e,i)=>`<div class="stub"><div><h3>${esc(e.name)}</h3><span>${new Date(e.date).toLocaleString([], {dateStyle:'medium',timeStyle:'short'})}</span><br><span>${esc(e.place||'Venue not set')}</span><br><span class="tag">${esc(e.cat)}</span></div><button class="x" aria-label="Delete event" data-i="${i}">×</button></div>`).join(''):'<p class="empty">No events yet. Add one above.</p>';
+ save('ee_events',events);tick();
+}
+function tick(){
+ const up=events.find(e=>new Date(e.date)>new Date());
+ if(!up){$('#nextName').textContent=events.length?'No upcoming events':'Nothing planned yet';['cd','ch','cm'].forEach(i=>$('#'+i).textContent=0);return}
+ const ms=new Date(up.date)-new Date();
+ $('#nextName').textContent=up.name;
+ $('#cd').textContent=Math.floor(ms/864e5);
+ $('#ch').textContent=Math.floor(ms%864e5/36e5);
+ $('#cm').textContent=Math.floor(ms%36e5/6e4);
+}
+function renderTasks(){
+ const left=tasks.filter(t=>!t.done).length;
+ $('#taskCount').textContent=tasks.length?`${left} of ${tasks.length} tasks left`:'Add the tasks you need to finish.';
+ $('#taskList').innerHTML=tasks.length?tasks.map((t,i)=>`<li class="${t.done?'done':''}"><input type="checkbox" style="flex:0 0 auto" ${t.done?'checked':''} data-t="${i}" aria-label="Mark done"><span>${esc(t.t)}</span><button class="x" aria-label="Delete task" data-d="${i}">×</button></li>`).join(''):'<li class="empty">No tasks yet.</li>';
+ save('ee_tasks',tasks);
+}
+function renderBudget(){
+ const sp=exps.reduce((s,e)=>s+e.a,0);
+ $('#spent').textContent='₹'+sp;$('#total').textContent='₹'+budget;
+ const l=budget-sp;
+ $('#left').innerHTML=budget?(l>=0?`₹${l} left`:`<span class="over">Over budget by ₹${-l}</span>`):'Set a budget to track what is left.';
+ $('#expList').innerHTML=exps.length?exps.map((e,i)=>`<li><span>${esc(e.n)}</span><b>₹${e.a}</b><button class="x" aria-label="Delete expense" data-e="${i}">×</button></li>`).join(''):'<li class="empty">No expenses yet.</li>';
+ save('ee_exps',exps);save('ee_budget',budget);
+}
+
+$('#evForm').onsubmit=e=>{e.preventDefault();events.push({name:$('#evName').value.trim(),date:$('#evDate').value,place:$('#evPlace').value.trim(),cat:$('#evCat').value});e.target.reset();renderEvents()};
+$('#taskForm').onsubmit=e=>{e.preventDefault();tasks.push({t:$('#taskIn').value.trim(),done:false});e.target.reset();renderTasks()};
+$('#budForm').onsubmit=e=>{e.preventDefault();budget=Number($('#budIn').value)||0;e.target.reset();renderBudget()};
+$('#expForm').onsubmit=e=>{e.preventDefault();exps.push({n:$('#expN').value.trim(),a:Number($('#expA').value)});e.target.reset();renderBudget()};
+$('#evList').onclick=e=>{const i=e.target.dataset.i;if(i!==undefined){events.splice(i,1);renderEvents()}};
+$('#taskList').onclick=e=>{const d=e.target.dataset;if(d.t!==undefined){tasks[d.t].done=e.target.checked;renderTasks()}if(d.d!==undefined){tasks.splice(d.d,1);renderTasks()}};
+$('#expList').onclick=e=>{const i=e.target.dataset.e;if(i!==undefined){exps.splice(i,1);renderBudget()}};
+
+renderEvents();renderTasks();renderBudget();setInterval(tick,30000);
+</script>
+</body>
+</html>
