@@ -149,13 +149,13 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-let events=load('ee_events',[]),tasks=load('ee_tasks',[]),exps=load('ee_exps',[]),budget=load('ee_budget',0),guests=load('ee_guests',[]);
+let events=load('ee2_events',[]),tasks=load('ee2_tasks',[]),exps=load('ee2_exps',[]),budget=load('ee2_budget',0),guests=load('ee2_guests',[]);
 const GS=['Coming','Maybe','Not coming'],GC=['','maybe','no'];
 
 function renderEvents(){
  events.sort((a,b)=>new Date(a.date)-new Date(b.date));
  $('#evList').innerHTML=events.length?events.map((e,i)=>`<div class="stub"><div><h3>${esc(e.name)}</h3><span>${new Date(e.date).toLocaleString([], {dateStyle:'medium',timeStyle:'short'})}</span><br><span>${esc(e.place||'Venue not set')}</span><br><span class="tag">${esc(e.cat)}</span></div><button class="x" aria-label="Delete event" data-i="${i}">×</button></div>`).join(''):'<p class="empty">No events yet. Add one above.</p>';
- save('ee_events',events);tick();stats();
+ save('ee2_events',events);tick();stats();
 }
 function tick(){
  const up=events.find(e=>new Date(e.date)>new Date());
@@ -170,7 +170,7 @@ function renderTasks(){
  const left=tasks.filter(t=>!t.done).length;
  $('#taskCount').textContent=tasks.length?`${left} of ${tasks.length} tasks left`:'Add the tasks you need to finish.';
  $('#taskList').innerHTML=tasks.length?tasks.map((t,i)=>`<li class="${t.done?'done':''}"><input type="checkbox" style="flex:0 0 auto" ${t.done?'checked':''} data-t="${i}" aria-label="Mark done"><span>${esc(t.t)}</span><button class="x" aria-label="Delete task" data-d="${i}">×</button></li>`).join(''):'<li class="empty">No tasks yet.</li>';
- save('ee_tasks',tasks);stats();
+ save('ee2_tasks',tasks);stats();
 }
 function renderBudget(){
  const sp=exps.reduce((s,e)=>s+e.a,0);
@@ -178,7 +178,7 @@ function renderBudget(){
  const l=budget-sp;
  $('#left').innerHTML=budget?(l>=0?`₹${l} left`:`<span class="over">Over budget by ₹${-l}</span>`):'Set a budget to track what is left.';
  $('#expList').innerHTML=exps.length?exps.map((e,i)=>`<li><span>${esc(e.n)}</span><b>₹${e.a}</b><button class="x" aria-label="Delete expense" data-e="${i}">×</button></li>`).join(''):'<li class="empty">No expenses yet.</li>';
- save('ee_exps',exps);save('ee_budget',budget);stats();
+ save('ee2_exps',exps);save('ee2_budget',budget);stats();
 }
 
 $('#evForm').onsubmit=e=>{e.preventDefault();events.push({name:$('#evName').value.trim(),date:$('#evDate').value,place:$('#evPlace').value.trim(),cat:$('#evCat').value});e.target.reset();renderEvents()};
@@ -194,7 +194,7 @@ function renderGuests(){
  const c=guests.filter(g=>g.s==0).length;
  $('#gCount').textContent=guests.length?`${c} of ${guests.length} guests coming`:'Add the people you are inviting.';
  $('#gList').innerHTML=guests.length?guests.map((g,i)=>`<li><span>${esc(g.n)}</span><button class="badge ${GC[g.s]}" data-g="${i}" aria-label="Change status">${GS[g.s]}</button><button class="x" aria-label="Delete guest" data-x="${i}">×</button></li>`).join(''):'<li class="empty">No guests yet.</li>';
- save('ee_guests',guests);
+ save('ee2_guests',guests);
 }
 $('#gForm').onsubmit=e=>{e.preventDefault();guests.push({n:$('#gN').value.trim(),s:0});e.target.reset();renderGuests()};
 $('#gList').onclick=e=>{const d=e.target.dataset;if(d.g!==undefined){guests[d.g].s=(guests[d.g].s+1)%3;renderGuests()}if(d.x!==undefined){guests.splice(d.x,1);renderGuests()}};
